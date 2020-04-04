@@ -13,36 +13,40 @@ namespace DinoRun.Objects
     {
         private Vector2 Position;
         private float Velocity = 0f;
+        private float Gravity = 0.1f;
+        private bool OnGround = false;
         private float InitY;
-        private bool HasJumped = false;
         Texture2D Sprite;
 
-        public Dino(float x, float y, float jumplimit, Texture2D sprite) 
+        public Dino(float x, float y, Texture2D sprite) 
         {
             Position.X = x;
             Position.Y = y;
             InitY = y;
             Sprite = sprite;
         }
-
         public void Update(GameTime gameTime)
         {
-            if ((Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.Up)) && HasJumped == false)
+            if (Position.Y > InitY)
             {
-                Position.Y -= 5f;
-                Velocity = -10f;
-                HasJumped = true;
+                Position.Y = InitY;
+                Velocity = 0.0f;
+                OnGround = true;
             }
-            if (HasJumped == false)
-                Velocity = 0;
-            else 
-                Velocity += 0.30f;
-
-            if (Position.Y >= InitY) 
+            if ((Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.Up)) && OnGround == true)
             {
-                HasJumped = false;
+                Velocity = -100f;
+                OnGround = false;
             }
+            //Change the if satement, it should only fire when the key is released on when it is up
+            if (Keyboard.GetState().IsKeyUp(Keys.Space) || Keyboard.GetState().IsKeyUp(Keys.Up)) 
+            {
+                if (Velocity < -6f)
+                    Velocity = -6f;
+            }
+            Velocity += Gravity;
             Position.Y += Velocity;
+
         }
         public void Draw(SpriteBatch spriteBatch) 
         {
