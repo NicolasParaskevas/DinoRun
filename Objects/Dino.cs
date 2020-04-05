@@ -13,8 +13,9 @@ namespace DinoRun.Objects
     {
         private Vector2 Position;
         private float Velocity = 0f;
-        private float Gravity = 0.1f;
+        private float Gravity = 0.5f;
         private bool OnGround = false;
+        private bool JumpPressed = false;
         private float InitY;
         Texture2D Sprite;
 
@@ -33,16 +34,17 @@ namespace DinoRun.Objects
                 Velocity = 0.0f;
                 OnGround = true;
             }
-            if ((Keyboard.GetState().IsKeyDown(Keys.Space) || Keyboard.GetState().IsKeyDown(Keys.Up)) && OnGround == true)
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && OnGround)
             {
-                Velocity = -100f;
+                Velocity = -15f;
                 OnGround = false;
+                JumpPressed = true;
             }
-            //Change the if satement, it should only fire when the key is released on when it is up
-            if (Keyboard.GetState().IsKeyUp(Keys.Space) || Keyboard.GetState().IsKeyUp(Keys.Up)) 
+            if (Keyboard.GetState().IsKeyUp(Keys.Space) && JumpPressed) 
             {
                 if (Velocity < -6f)
                     Velocity = -6f;
+                JumpPressed = false;
             }
             Velocity += Gravity;
             Position.Y += Velocity;
