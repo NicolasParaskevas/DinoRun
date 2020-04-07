@@ -19,13 +19,14 @@ namespace DinoRun.Objects
         private float InitY;
         Texture2D Sprite;
 
-        public Dino(float x, float y, Texture2D sprite) 
+        public Dino(Vector2 position, Texture2D sprite) 
         {
-            Position.X = x;
-            Position.Y = y;
-            InitY = y;
+            Position.X = position.X;
+            Position.Y = position.Y;
+            InitY = position.Y;
             Sprite = sprite;
         }
+
         public void Update(GameTime gameTime)
         {
             if (Position.Y > InitY)
@@ -50,6 +51,7 @@ namespace DinoRun.Objects
             Position.Y += Velocity;
 
         }
+
         public void Draw(SpriteBatch spriteBatch) 
         {
             spriteBatch.Draw(Sprite, Position, Color.White);
