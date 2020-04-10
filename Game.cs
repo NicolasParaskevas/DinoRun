@@ -1,4 +1,5 @@
 ﻿using DinoRun.Objects;
+using DinoRun.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,6 +13,7 @@ namespace DinoRun
         Dino dino;
         Ground ground;
         Ground ground2;
+        State currentState = State.Menu;
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -44,10 +46,21 @@ namespace DinoRun
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            ground.Update(gameTime);
-            ground2.Update(gameTime);
-            dino.Update(gameTime);
+            switch (currentState)
+            {
+                case State.Menu:
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                        currentState = State.Game;
+                    break;
+                case State.Game:
+                    ground.Update(gameTime);
+                    ground2.Update(gameTime);
+                    dino.Update(gameTime);
+                    break;
+                case State.GameOver:
+                    break;
+            }
+            
             base.Update(gameTime);
         }
 
@@ -56,9 +69,17 @@ namespace DinoRun
             GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
-            ground.Draw(spriteBatch);
-            ground2.Draw(spriteBatch);
-            dino.Draw(spriteBatch);
+            switch (currentState) 
+            {
+                case State.Menu:
+                case State.Game:
+                    ground.Draw(spriteBatch);
+                    ground2.Draw(spriteBatch);
+                    dino.Draw(spriteBatch);
+                    break;
+                case State.GameOver:
+                    break;
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);
