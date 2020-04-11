@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using DinoRun.States;
+using DinoRun.Animations;
 
 namespace DinoRun.Objects
 {
@@ -18,13 +20,15 @@ namespace DinoRun.Objects
         private bool JumpPressed = false;
         private float InitY;
         Texture2D Sprite;
+        AnimatedSprite animSprite;
 
-        public Dino(Vector2 position, Texture2D sprite) 
+        public Dino(Vector2 position, Texture2D sprite, Texture2D animationSheet) 
         {
             Position.X = position.X;
             Position.Y = position.Y;
             InitY = position.Y;
             Sprite = sprite;
+            animSprite = new AnimatedSprite(animationSheet, 1, 2,0.1);
         }
 
         public void Update(GameTime gameTime)
@@ -34,6 +38,7 @@ namespace DinoRun.Objects
                 Position.Y = InitY;
                 Velocity = 0.0f;
                 OnGround = true;
+                animSprite.Update(gameTime);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && OnGround)
             {
@@ -52,9 +57,12 @@ namespace DinoRun.Objects
 
         }
 
-        public void Draw(SpriteBatch spriteBatch) 
+        public void Draw(SpriteBatch spriteBatch, State state) 
         {
-            spriteBatch.Draw(Sprite, Position, Color.White);
+            if (state == State.Game)
+                animSprite.Draw(spriteBatch, Position);
+            else
+                spriteBatch.Draw(Sprite, Position, Color.White);
         }
     }
 }

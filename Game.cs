@@ -32,7 +32,7 @@ namespace DinoRun
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"));
+            dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"));
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
         }
@@ -75,7 +75,7 @@ namespace DinoRun
                 case State.Game:
                     ground.Draw(spriteBatch);
                     ground2.Draw(spriteBatch);
-                    dino.Draw(spriteBatch);
+                    dino.Draw(spriteBatch,currentState);
                     break;
                 case State.GameOver:
                     break;
