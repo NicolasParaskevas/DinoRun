@@ -71,7 +71,7 @@ namespace DinoRun
             GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(Font, gameTime.TotalGameTime.TotalSeconds.ToString(), new Vector2(0, 0), Color.Black);
+            spriteBatch.DrawString(Font, ((int)gameTime.TotalGameTime.TotalSeconds).ToString(), new Vector2(0, 0), Color.Black);
             switch (currentState) 
             {
                 case State.Menu:
