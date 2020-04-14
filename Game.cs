@@ -13,6 +13,7 @@ namespace DinoRun
         Dino dino;
         Ground ground;
         Ground ground2;
+        SpriteFont Font;
         State currentState = State.Menu;
         public Game()
         {
@@ -35,6 +36,7 @@ namespace DinoRun
             dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"));
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
+            Font = Content.Load<SpriteFont>("Font");
         }
 
         protected override void UnloadContent()
@@ -69,6 +71,7 @@ namespace DinoRun
             GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
+            spriteBatch.DrawString(Font, gameTime.TotalGameTime.TotalSeconds.ToString(), new Vector2(0, 0), Color.Black);
             switch (currentState) 
             {
                 case State.Menu:
