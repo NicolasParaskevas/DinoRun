@@ -110,6 +110,9 @@ namespace DinoRun
             if (ScoreTimer <= 0) 
             {
                 Score++;
+                if (Score % 100 == 0)
+                    WorldSpeed+=1;
+
                 ScoreTimer = 100;
             }
         }
