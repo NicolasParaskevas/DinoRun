@@ -15,6 +15,10 @@ namespace DinoRun
         Ground ground2;
         SpriteFont Font;
         State currentState = State.Menu;
+        int Score = 0;
+        double ScoreTimer = 100;
+        int WorldSpeed = 1;
+
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -55,9 +59,10 @@ namespace DinoRun
                         currentState = State.Game;
                     break;
                 case State.Game:
-                    ground.Update(gameTime);
-                    ground2.Update(gameTime);
+                    ground.Update(gameTime, WorldSpeed);
+                    ground2.Update(gameTime, WorldSpeed);
                     dino.Update(gameTime);
+                    UpdateScore(gameTime);
                     break;
                 case State.GameOver:
                     break;
@@ -71,14 +76,18 @@ namespace DinoRun
             GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(Font, ((int)gameTime.TotalGameTime.TotalSeconds).ToString(), new Vector2(0, 0), Color.Black);
             switch (currentState) 
             {
                 case State.Menu:
+                    ground.Draw(spriteBatch);
+                    ground2.Draw(spriteBatch);
+                    dino.Draw(spriteBatch, currentState);
+                    break;
                 case State.Game:
                     ground.Draw(spriteBatch);
                     ground2.Draw(spriteBatch);
                     dino.Draw(spriteBatch,currentState);
+                    spriteBatch.DrawString(Font, "Score: " + Score.ToString(),new Vector2(0, 0), new Color(83,83,83));
                     break;
                 case State.GameOver:
                     break;
@@ -86,6 +95,20 @@ namespace DinoRun
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void UpdateScore(GameTime gameTime) 
+        {
+            ScoreTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (ScoreTimer <= 0) 
+            {
+                Score++;
+                ScoreTimer = 100;
+            }
+        }
+        public void ResetScore() 
+        {
+            Score = 0;
         }
     }
 }

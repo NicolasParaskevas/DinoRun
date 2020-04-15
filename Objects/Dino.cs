@@ -28,7 +28,7 @@ namespace DinoRun.Objects
             Position.Y = position.Y;
             InitY = position.Y;
             Sprite = sprite;
-            animSprite = new AnimatedSprite(animationSheet, 1, 2,0.1);
+            animSprite = new AnimatedSprite(animationSheet, 1, 2,0.2);
         }
 
         public void Update(GameTime gameTime)
@@ -59,7 +59,7 @@ namespace DinoRun.Objects
 
         public void Draw(SpriteBatch spriteBatch, State state) 
         {
-            if (state == State.Game)
+            if (state == State.Game && OnGround == true)
                 animSprite.Draw(spriteBatch, Position);
             else
                 spriteBatch.Draw(Sprite, Position, Color.White);

@@ -19,13 +19,13 @@ namespace DinoRun.Objects
             Position = position;
         }
 
-        public void Update(GameTime gameTime) 
+        public void Update(GameTime gameTime, int worldSpeed) 
         {
             if(Position.X < -Sprite.Width) 
             {
                 Position.X = Sprite.Width;
             }
-            Position.X -= 3;
+            Position.X -= 30*worldSpeed*(1/(float)gameTime.ElapsedGameTime.TotalMilliseconds);
         }
 
         public void Draw(SpriteBatch spriteBatch) 
