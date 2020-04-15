@@ -18,6 +18,10 @@ namespace DinoRun
         int Score = 0;
         double ScoreTimer = 100;
         int WorldSpeed = 1;
+        //Title
+        Vector2 titleSize = new Vector2(0, 0);
+        string Title = "Press SPACE to Start!";
+
 
         public Game()
         {
@@ -41,6 +45,8 @@ namespace DinoRun
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
             Font = Content.Load<SpriteFont>("Font");
+
+            titleSize = Font.MeasureString(Title);
         }
 
         protected override void UnloadContent()
@@ -79,6 +85,7 @@ namespace DinoRun
             switch (currentState) 
             {
                 case State.Menu:
+                    spriteBatch.DrawString(Font, Title, new Vector2(titleSize.X/2, 100), new Color(83, 83, 83));
                     ground.Draw(spriteBatch);
                     ground2.Draw(spriteBatch);
                     dino.Draw(spriteBatch, currentState);
