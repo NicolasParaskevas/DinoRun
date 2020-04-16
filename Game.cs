@@ -17,7 +17,7 @@ namespace DinoRun
         State currentState = State.Menu;
         int Score = 0;
         double ScoreTimer = 100;
-        int WorldSpeed = 1;
+        float WorldSpeed = 1;
         //Title
         Vector2 titleSize = new Vector2(0, 0);
         string Title = "Press SPACE to Start!";
@@ -111,7 +111,7 @@ namespace DinoRun
             {
                 Score++;
                 if (Score % 100 == 0)
-                    WorldSpeed+=1;
+                    WorldSpeed+=0.5f;
 
                 ScoreTimer = 100;
             }
