@@ -63,6 +63,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+    <None Include="Content\cloud.xnb" />
     <None Include="Content\dino.xnb" />
     <None Include="Content\dinofont.xnb" />
     <None Include="Content\dino_run_sheet.xnb" />

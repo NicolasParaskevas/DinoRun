@@ -3,6 +3,8 @@ using DinoRun.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
 namespace DinoRun
 {
@@ -13,10 +15,12 @@ namespace DinoRun
         Dino dino;
         Ground ground;
         Ground ground2;
+        List<Cloud> clouds;
         SpriteFont Font;
         State currentState = State.Menu;
         int Score = 0;
         double ScoreTimer = 100;
+        double CloudTimer = 1000;
         float WorldSpeed = 1;
         //Title
         Vector2 titleSize = new Vector2(0, 0);
@@ -44,6 +48,7 @@ namespace DinoRun
             dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"));
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
+            clouds = new List<Cloud>();
             Font = Content.Load<SpriteFont>("Font");
 
             titleSize = Font.MeasureString(Title);
@@ -67,6 +72,18 @@ namespace DinoRun
                 case State.Game:
                     ground.Update(gameTime, WorldSpeed);
                     ground2.Update(gameTime, WorldSpeed);
+                    AddCloud(gameTime);
+                    foreach (var cloud in clouds)
+                        cloud.Update(gameTime);
+
+                    foreach (var cloud in clouds) 
+                    {
+                        if (cloud.isVisible == false) 
+                        {
+                            clouds.Remove(cloud);
+                            break;
+                        }
+                    }
                     dino.Update(gameTime);
                     UpdateScore(gameTime);
                     break;
@@ -93,6 +110,10 @@ namespace DinoRun
                 case State.Game:
                     ground.Draw(spriteBatch);
                     ground2.Draw(spriteBatch);
+                    
+                    foreach (var cloud in clouds) 
+                        cloud.Draw(spriteBatch);
+
                     dino.Draw(spriteBatch,currentState);
                     spriteBatch.DrawString(Font, "Score: " + Score.ToString(),new Vector2(0, 0), new Color(83,83,83));
                     break;
@@ -114,6 +135,16 @@ namespace DinoRun
                     WorldSpeed+=0.5f;
 
                 ScoreTimer = 100;
+            }
+        }
+        private void AddCloud(GameTime gameTime) 
+        {
+            var rand = new Random(gameTime.TotalGameTime.Seconds);
+            CloudTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            if(CloudTimer <= 0)
+            {
+                clouds.Add(new Cloud(Content.Load<Texture2D>("cloud"), gameTime));
+                CloudTimer = 10000 + rand.NextDouble()*20000; //Spawining time is inbetween 10 to 30 seconds
             }
         }
         public void ResetScore() 

@@ -13,20 +13,28 @@ namespace DinoRun.Objects
         private Vector2 Position;
         private Texture2D Sprite;
         private float Speed;
+        public bool isVisible = true;
         
-        public Cloud(Vector2 position, Texture2D sprite, float speed)
+        public Cloud(Texture2D sprite, GameTime gameTime)
         {
-            Position = position;
-            Speed = speed;
             Sprite = sprite;
+            Random rand = new Random(gameTime.TotalGameTime.Seconds);
+            Position = new Vector2(800, rand.Next(50,250));
+            Speed = (float)rand.NextDouble() + (float)0.1;
+            isVisible = true;
         }
 
         public void Update(GameTime gameTime) 
         {
+            
+            if (Position.X < -Sprite.Width)
+            {
+                isVisible = false;
+            }
             Position.X -= Speed;
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Sprite, Position, Color.White);
         }
