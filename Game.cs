@@ -102,7 +102,8 @@ namespace DinoRun
             switch (currentState) 
             {
                 case State.Menu:
-                    spriteBatch.DrawString(Font, Title, new Vector2(titleSize.X/2, 100), new Color(83, 83, 83));
+                    int alpha = (int)(Math.Sin(gameTime.TotalGameTime.TotalSeconds*2) * 55) + 145;
+                    spriteBatch.DrawString(Font, Title, new Vector2(titleSize.X/2, 100), new Color(83, 83, 83, alpha));
                     ground.Draw(spriteBatch);
                     ground2.Draw(spriteBatch);
                     dino.Draw(spriteBatch, currentState);
