@@ -33,7 +33,6 @@ namespace DinoRun
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 400;
-            
         }
 
         protected override void Initialize()
@@ -50,7 +49,7 @@ namespace DinoRun
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
             clouds = new List<Cloud>();
             Font = Content.Load<SpriteFont>("Font");
-
+            HUD.Init(Font);
             titleSize = Font.MeasureString(Title);
         }
 
@@ -90,7 +89,6 @@ namespace DinoRun
                 case State.GameOver:
                     break;
             }
-            
             base.Update(gameTime);
         }
 
@@ -99,14 +97,13 @@ namespace DinoRun
             GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
-            switch (currentState) 
-            {
+            switch (currentState)
+            { 
                 case State.Menu:
-                    int alpha = (int)(Math.Sin(gameTime.TotalGameTime.TotalSeconds*2) * 55) + 145;
-                    spriteBatch.DrawString(Font, Title, new Vector2(titleSize.X/2, 100), new Color(83, 83, 83, alpha));
                     ground.Draw(spriteBatch);
                     ground2.Draw(spriteBatch);
                     dino.Draw(spriteBatch, currentState);
+                    HUD.DrawMenu(spriteBatch, gameTime);
                     break;
                 case State.Game:
                     ground.Draw(spriteBatch);
@@ -116,7 +113,7 @@ namespace DinoRun
                         cloud.Draw(spriteBatch);
 
                     dino.Draw(spriteBatch,currentState);
-                    spriteBatch.DrawString(Font, "Score: " + Score.ToString(),new Vector2(0, 0), new Color(83,83,83));
+                    HUD.DrawGame(spriteBatch, gameTime, Score);
                     break;
                 case State.GameOver:
                     break;
@@ -138,6 +135,7 @@ namespace DinoRun
                 ScoreTimer = 100;
             }
         }
+
         private void AddCloud(GameTime gameTime) 
         {
             var rand = new Random(gameTime.TotalGameTime.Seconds);
@@ -148,6 +146,7 @@ namespace DinoRun
                 CloudTimer = 10000 + rand.NextDouble()*20000; //Spawining time is inbetween 10 to 30 seconds
             }
         }
+
         public void ResetScore() 
         {
             Score = 0;

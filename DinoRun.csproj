@@ -46,6 +46,7 @@
     <Compile Include="Objects\Cloud.cs" />
     <Compile Include="Objects\Dino.cs" />
     <Compile Include="Objects\Ground.cs" />
+    <Compile Include="Objects\HUD.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States\State.cs" />
