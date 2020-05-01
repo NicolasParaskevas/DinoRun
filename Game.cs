@@ -16,11 +16,13 @@ namespace DinoRun
         Ground ground;
         Ground ground2;
         List<Cloud> clouds;
+        List<Cactus> cacti;
         SpriteFont Font;
         State currentState = State.Menu;
         int Score = 0;
         double ScoreTimer = 100;
         double CloudTimer = 1000;
+        double CactusTimer = 500;
         float WorldSpeed = 1;
         //Title
         Vector2 titleSize = new Vector2(0, 0);
@@ -48,6 +50,7 @@ namespace DinoRun
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
             clouds = new List<Cloud>();
+            cacti = new List<Cactus>();
             Font = Content.Load<SpriteFont>("Font");
             HUD.Init(Font);
             titleSize = Font.MeasureString(Title);
@@ -74,12 +77,22 @@ namespace DinoRun
                     AddCloud(gameTime);
                     foreach (var cloud in clouds)
                         cloud.Update(gameTime);
-
                     foreach (var cloud in clouds) 
                     {
                         if (cloud.isVisible == false) 
                         {
                             clouds.Remove(cloud);
+                            break;
+                        }
+                    }
+                    AddCactus(gameTime);
+                    foreach (var cactus in cacti)
+                        cactus.Update(gameTime, WorldSpeed);
+                    foreach (var cactus in cacti)
+                    {
+                        if (cactus.isVisible == false)
+                        {
+                            cacti.Remove(cactus);
                             break;
                         }
                     }
@@ -112,6 +125,9 @@ namespace DinoRun
                     foreach (var cloud in clouds) 
                         cloud.Draw(spriteBatch);
 
+                    foreach (var cactus in cacti)
+                        cactus.Draw(spriteBatch);
+
                     dino.Draw(spriteBatch,currentState);
                     HUD.DrawGame(spriteBatch, gameTime, Score);
                     break;
@@ -123,7 +139,20 @@ namespace DinoRun
             base.Draw(gameTime);
         }
 
-        public void UpdateScore(GameTime gameTime) 
+        //Cactus Logic
+        
+        private void AddCactus(GameTime gameTime) 
+        {
+            CactusTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (CactusTimer <= 0)
+            {
+                cacti.Add(new Cactus(Content.Load<Texture2D>("cactus")));
+                CactusTimer = 3000 + WorldSpeed*2; //Spawining gets more time as the world speed increases
+            }
+        }
+
+        //Score Logic
+        private void UpdateScore(GameTime gameTime) 
         {
             ScoreTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
             if (ScoreTimer <= 0) 
@@ -136,6 +165,7 @@ namespace DinoRun
             }
         }
 
+        //Cloud Logic
         private void AddCloud(GameTime gameTime) 
         {
             var rand = new Random(gameTime.TotalGameTime.Seconds);
@@ -147,7 +177,7 @@ namespace DinoRun
             }
         }
 
-        public void ResetScore() 
+        private void ResetScore() 
         {
             Score = 0;
         }
