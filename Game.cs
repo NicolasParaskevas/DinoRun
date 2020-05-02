@@ -23,7 +23,7 @@ namespace DinoRun
         double ScoreTimer = 100;
         double CloudTimer = 1000;
         double CactusTimer = 500;
-        float WorldSpeed = 1;
+        float WorldSpeed = 2;
         //Title
         Vector2 titleSize = new Vector2(0, 0);
         string Title = "Press SPACE to Start!";
@@ -148,11 +148,12 @@ namespace DinoRun
         
         private void AddCactus(GameTime gameTime) 
         {
+            var rand = new Random(gameTime.TotalGameTime.Seconds);
             CactusTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
             if (CactusTimer <= 0)
             {
                 cacti.Add(new Cactus(cactusTexture));
-                CactusTimer = 3000 + WorldSpeed*2; //Spawining gets more time as the world speed increases
+                CactusTimer = 1000 + rand.NextDouble()*1000 + WorldSpeed; //Spawining gets more time as the world speed increases
             }
         }
 
@@ -163,7 +164,7 @@ namespace DinoRun
             if (ScoreTimer <= 0) 
             {
                 Score++;
-                if (Score % 100 == 0)
+                if (Score % 100 == 0 && WorldSpeed < 10)
                     WorldSpeed+=0.5f;
 
                 ScoreTimer = 100;

@@ -26,7 +26,7 @@ namespace DinoRun.Objects
                 float overflow = Sprite.Width + Position.X;
                 Position.X = Sprite.Width + overflow;
             }
-            Position.X -= 30*worldSpeed*(1/(float)gameTime.ElapsedGameTime.TotalMilliseconds);
+            Position.X -= 30 * worldSpeed *(1/(float)gameTime.ElapsedGameTime.TotalMilliseconds);
         }
 
         public void Draw(SpriteBatch spriteBatch) 
