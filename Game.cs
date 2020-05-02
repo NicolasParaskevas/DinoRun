@@ -27,6 +27,9 @@ namespace DinoRun
         //Title
         Vector2 titleSize = new Vector2(0, 0);
         string Title = "Press SPACE to Start!";
+        //Textures
+        Texture2D cactusTexture;
+        Texture2D cloudTexture;
 
 
         public Game()
@@ -49,6 +52,8 @@ namespace DinoRun
             dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"));
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
+            cloudTexture = Content.Load<Texture2D>("cloud");
+            cactusTexture = Content.Load<Texture2D>("cactus");
             clouds = new List<Cloud>();
             cacti = new List<Cactus>();
             Font = Content.Load<SpriteFont>("Font");
@@ -146,7 +151,7 @@ namespace DinoRun
             CactusTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
             if (CactusTimer <= 0)
             {
-                cacti.Add(new Cactus(Content.Load<Texture2D>("cactus")));
+                cacti.Add(new Cactus(cactusTexture));
                 CactusTimer = 3000 + WorldSpeed*2; //Spawining gets more time as the world speed increases
             }
         }
@@ -172,7 +177,7 @@ namespace DinoRun
             CloudTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
             if(CloudTimer <= 0)
             {
-                clouds.Add(new Cloud(Content.Load<Texture2D>("cloud"), gameTime));
+                clouds.Add(new Cloud(cloudTexture, gameTime));
                 CloudTimer = 10000 + rand.NextDouble()*20000; //Spawining time is inbetween 10 to 30 seconds
             }
         }
