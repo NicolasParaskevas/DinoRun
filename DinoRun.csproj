@@ -66,6 +66,8 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
     <None Include="Content\cactus.xnb" />
+    <None Include="Content\cactus2.xnb" />
+    <None Include="Content\cactus3.xnb" />
     <None Include="Content\cloud.xnb" />
     <None Include="Content\dino.xnb" />
     <None Include="Content\dinofont.xnb" />

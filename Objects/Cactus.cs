@@ -17,8 +17,9 @@ namespace DinoRun.Objects
 
         public Cactus(Texture2D sprite) 
         {
-            Position = new Vector2(800,300);
             Sprite = sprite;
+            Position = new Vector2(800,0);
+            Position.Y = 380 - Sprite.Height;
         }
 
         public void Update(GameTime gameTime, float worldSpeed) 

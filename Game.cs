@@ -28,7 +28,7 @@ namespace DinoRun
         Vector2 titleSize = new Vector2(0, 0);
         string Title = "Press SPACE to Start!";
         //Textures
-        Texture2D cactusTexture;
+        List<Texture2D> cactiSprites;
         Texture2D cloudTexture;
 
 
@@ -52,10 +52,16 @@ namespace DinoRun
             dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"));
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
-            cloudTexture = Content.Load<Texture2D>("cloud");
-            cactusTexture = Content.Load<Texture2D>("cactus");
-            clouds = new List<Cloud>();
+            
+            cactiSprites = new List<Texture2D>();
+            cactiSprites.Add(Content.Load<Texture2D>("cactus"));
+            cactiSprites.Add(Content.Load<Texture2D>("cactus2"));
+            cactiSprites.Add(Content.Load<Texture2D>("cactus3"));
             cacti = new List<Cactus>();
+
+            cloudTexture = Content.Load<Texture2D>("cloud");
+            clouds = new List<Cloud>();
+            
             Font = Content.Load<SpriteFont>("Font");
             HUD.Init(Font);
             titleSize = Font.MeasureString(Title);
@@ -152,7 +158,7 @@ namespace DinoRun
             CactusTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
             if (CactusTimer <= 0)
             {
-                cacti.Add(new Cactus(cactusTexture));
+                cacti.Add(new Cactus(cactiSprites[rand.Next(3)])); //max is not inclusive in Next function
                 CactusTimer = 1000 + rand.NextDouble()*1000 + WorldSpeed; //Spawining gets more time as the world speed increases
             }
         }
