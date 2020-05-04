@@ -22,7 +22,7 @@ namespace DinoRun
         int Score = 0;
         double ScoreTimer = 100;
         double CloudTimer = 1000;
-        double CactusTimer = 500;
+        double CactusTimer = 2000;
         float WorldSpeed = 2;
         //Title
         Vector2 titleSize = new Vector2(0, 0);
@@ -159,7 +159,10 @@ namespace DinoRun
             if (CactusTimer <= 0)
             {
                 cacti.Add(new Cactus(cactiSprites[rand.Next(3)])); //max is not inclusive in Next function
-                CactusTimer = 1000 + rand.NextDouble()*1000 + WorldSpeed; //Spawining gets more time as the world speed increases
+                if(WorldSpeed < 5)
+                    CactusTimer = 2000;
+                else
+                    CactusTimer = 1000 + rand.NextDouble() * 500;
             }
         }
 
