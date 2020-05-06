@@ -32,7 +32,7 @@ namespace DinoRun
         List<Texture2D> cactiSprites;
         Texture2D cloudTexture;
         World world;
-
+        Texture2D _DebugTexture;
 
         public Game()
         {
@@ -52,7 +52,9 @@ namespace DinoRun
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"),world);
+            _DebugTexture = new Texture2D(GraphicsDevice, 1, 1);
+            _DebugTexture.SetData(new Color[] { Color.DarkSlateGray });
+            dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"),world, _DebugTexture);
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
             
@@ -116,11 +118,17 @@ namespace DinoRun
                     var result = dino.CheckCollision();
                     if (result.HasCollided)
                     {
+                        currentState = State.GameOver;
                         Console.WriteLine("Body collided!" + gameTime.TotalGameTime.TotalSeconds.ToString());
                     }
                     UpdateScore(gameTime);
                     break;
                 case State.GameOver:
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space)) 
+                    {
+                        ResetGame();
+                        currentState = State.Game;
+                    }
                     break;
             }
             base.Update(gameTime);
@@ -153,6 +161,15 @@ namespace DinoRun
                     HUD.DrawGame(spriteBatch, gameTime, Score);
                     break;
                 case State.GameOver:
+                    ground.Draw(spriteBatch);
+                    ground2.Draw(spriteBatch);
+                    foreach (var cloud in clouds)
+                        cloud.Draw(spriteBatch);
+
+                    foreach (var cactus in cacti)
+                        cactus.Draw(spriteBatch);
+                    dino.Draw(spriteBatch, currentState);
+                    HUD.DrawGameOVer(spriteBatch,gameTime,Score);
                     break;
             }
             spriteBatch.End();
@@ -168,7 +185,7 @@ namespace DinoRun
             CactusTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
             if (CactusTimer <= 0)
             {
-                cacti.Add(new Cactus(cactiSprites[rand.Next(3)],world)); //max is not inclusive in Next function
+                cacti.Add(new Cactus(cactiSprites[rand.Next(3)],world, _DebugTexture)); //max is not inclusive in Next function
                 if(WorldSpeed < 5)
                     CactusTimer = 2000;
                 else
@@ -202,8 +219,14 @@ namespace DinoRun
             }
         }
 
-        private void ResetScore() 
+        private void ResetGame() 
         {
+            currentState = State.Reset;
+            clouds.Clear();
+            foreach (var cactus in cacti)
+                world.Remove(cactus.Body);
+            cacti.Clear();
+            WorldSpeed = 2;
             Score = 0;
         }
     }

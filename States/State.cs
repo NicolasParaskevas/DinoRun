@@ -13,6 +13,7 @@ namespace DinoRun.States
     {
         Menu = 0,
         Game = 1,
-        GameOver = 2
+        GameOver = 2,
+        Reset = 3
     }
 }

@@ -12,17 +12,25 @@ namespace DinoRun.Objects
     //Logic for the Heads up Display (Titles score high score text etc)
     public static class HUD
     {
-        private static string Title = "Press SPACE to Start!";
         private static SpriteFont Font;
+        private static string Title = "Press SPACE to Start!";
         private static Vector2 titleSize = new Vector2(0, 0);
         private static Vector2 titlePosition = new Vector2(0, 0);
+
+        private static string GameOverTitle = "Game Over!";
+        private static Vector2 gameOverSize = new Vector2(0, 0);
+        private static Vector2 gameOverPosition = new Vector2(0, 0);
 
         public static void Init(SpriteFont font)
         {
             Font = font;
             titleSize = font.MeasureString(Title);
-            titlePosition.X = titleSize.X / 2;
+            titlePosition.X = 400 - titleSize.X / 2;
             titlePosition.Y = 150;
+
+            gameOverSize = font.MeasureString(GameOverTitle);
+            gameOverPosition.X = 400 - gameOverSize.X / 2;
+            gameOverPosition.Y = 150;
         }
 
         //Drawing the title
@@ -35,8 +43,8 @@ namespace DinoRun.Objects
         //Drawing score & highscore
         public static void DrawGame(SpriteBatch spriteBatch, GameTime gameTime, int score)
         {
-            spriteBatch.DrawString(Font, "Score: " + score.ToString(), new Vector2(0, 0), new Color(83, 83, 83));
-            if(titlePosition.Y + titleSize.Y > 0) 
+            DrawScore(spriteBatch, score);
+            if (titlePosition.Y + titleSize.Y > 0) 
             {
                 spriteBatch.DrawString(Font, Title, titlePosition, new Color(83, 83, 83));
                 titlePosition.Y -= 10;
@@ -45,9 +53,15 @@ namespace DinoRun.Objects
         }
 
         //Drawing game over screen
-        public static void DrawGameOVer(SpriteBatch spriteBatch, GameTime gameTime)
+        public static void DrawGameOVer(SpriteBatch spriteBatch, GameTime gameTime, int score)
         {
+            DrawScore(spriteBatch, score);
+            spriteBatch.DrawString(Font, GameOverTitle, gameOverPosition, new Color(83, 83, 83));
+        }
 
+        private static void DrawScore(SpriteBatch spriteBatch,int score) 
+        {
+            spriteBatch.DrawString(Font, "Score: " + score.ToString(), new Vector2(0, 0), new Color(83, 83, 83));
         }
     }
 }

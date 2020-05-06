@@ -24,8 +24,9 @@ namespace DinoRun.Objects
         public IBox Body { get; private set; }
         Texture2D Sprite;
         AnimatedSprite animSprite;
+        Texture2D _DebugTexture;
 
-        public Dino(Vector2 position, Texture2D sprite, Texture2D animationSheet, World world) 
+        public Dino(Vector2 position, Texture2D sprite, Texture2D animationSheet, World world, Texture2D debug_Texture) 
         {
             Position.X = position.X;
             Position.Y = position.Y;
@@ -33,6 +34,7 @@ namespace DinoRun.Objects
             Sprite = sprite;
             Body = world.Create(Position.X, Position.Y, Sprite.Width, Sprite.Height);
             animSprite = new AnimatedSprite(animationSheet, 1, 2,0.2);
+            _DebugTexture = debug_Texture;
         }
 
         public void Update(GameTime gameTime)
@@ -63,6 +65,7 @@ namespace DinoRun.Objects
         public IMovement CheckCollision()
         {
             var result = Body.Move(Position.X, Position.Y, (collision) => CollisionResponses.None);
+            
             return result;
         }
 
@@ -73,7 +76,7 @@ namespace DinoRun.Objects
             else
                 spriteBatch.Draw(Sprite, Position, Color.White);
 
-            spriteBatch.Draw(Sprite, new Vector2(Body.X, Body.Y), new Color(Color.Green, 0.5f));
+            spriteBatch.Draw(_DebugTexture, new Rectangle((int)Body.X,(int)Body.Y,(int)Body.Bounds.Width,(int)Body.Bounds.Height), new Color(Color.Green, 0.5f));
         }
     }
 }
