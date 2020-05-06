@@ -13,3 +13,5 @@ I took the assets from this repository https://github.com/wayou/t-rex-runner
 
 Animation:
 The animation class is a modified version of this tutorial http://rbwhitaker.wikidot.com/monogame-texture-atlases-2
+
+Collision Detection from: https://github.com/dotnet-ad/Humper
