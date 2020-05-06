@@ -1,5 +1,6 @@
 ﻿using DinoRun.Objects;
 using DinoRun.States;
+using Humper;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -30,6 +31,7 @@ namespace DinoRun
         //Textures
         List<Texture2D> cactiSprites;
         Texture2D cloudTexture;
+        World world;
 
 
         public Game()
@@ -38,6 +40,7 @@ namespace DinoRun
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 400;
+            world = new World(800, 400);
         }
 
         protected override void Initialize()
@@ -49,7 +52,7 @@ namespace DinoRun
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"));
+            dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"),world);
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
             
@@ -98,7 +101,9 @@ namespace DinoRun
                     }
                     AddCactus(gameTime);
                     foreach (var cactus in cacti)
+                    {
                         cactus.Update(gameTime, WorldSpeed);
+                    }
                     foreach (var cactus in cacti)
                     {
                         if (cactus.isVisible == false)
@@ -108,6 +113,11 @@ namespace DinoRun
                         }
                     }
                     dino.Update(gameTime);
+                    var result = dino.CheckCollision();
+                    if (result.HasCollided)
+                    {
+                        Console.WriteLine("Body collided!" + gameTime.TotalGameTime.TotalSeconds.ToString());
+                    }
                     UpdateScore(gameTime);
                     break;
                 case State.GameOver:
@@ -158,7 +168,7 @@ namespace DinoRun
             CactusTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
             if (CactusTimer <= 0)
             {
-                cacti.Add(new Cactus(cactiSprites[rand.Next(3)])); //max is not inclusive in Next function
+                cacti.Add(new Cactus(cactiSprites[rand.Next(3)],world)); //max is not inclusive in Next function
                 if(WorldSpeed < 5)
                     CactusTimer = 2000;
                 else
