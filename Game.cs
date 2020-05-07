@@ -25,9 +25,6 @@ namespace DinoRun
         double CloudTimer = 1000;
         double CactusTimer = 2000;
         float WorldSpeed = 2;
-        //Title
-        Vector2 titleSize = new Vector2(0, 0);
-        string Title = "Press SPACE to Start!";
         //Textures
         List<Texture2D> cactiSprites;
         Texture2D cloudTexture;
@@ -69,7 +66,6 @@ namespace DinoRun
             
             Font = Content.Load<SpriteFont>("Font");
             HUD.Init(Font);
-            titleSize = Font.MeasureString(Title);
         }
 
         protected override void UnloadContent()
