@@ -25,6 +25,7 @@ namespace DinoRun
         double CloudTimer = 1000;
         double CactusTimer = 2000;
         float WorldSpeed = 2;
+        bool SpaceReleased = false;
         //Textures
         List<Texture2D> cactiSprites;
         Texture2D cloudTexture;
@@ -120,9 +121,11 @@ namespace DinoRun
                     UpdateScore(gameTime);
                     break;
                 case State.GameOver:
-                    if (Keyboard.GetState().IsKeyDown(Keys.Space)) 
+                    if (Keyboard.GetState().IsKeyUp(Keys.Space)) SpaceReleased = true; 
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space) && SpaceReleased) 
                     {
                         ResetGame();
+                        SpaceReleased = false;
                         currentState = State.Game;
                     }
                     break;
