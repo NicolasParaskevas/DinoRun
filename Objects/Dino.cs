@@ -27,7 +27,7 @@ namespace DinoRun.Objects
             Position.Y = position.Y;
             InitY = position.Y;
             Sprite = sprite;
-            Body = world.Create(Position.X, Position.Y, Sprite.Width, Sprite.Height);
+            Body = world.Create(Position.X, Position.Y, Sprite.Width-20, Sprite.Height);
             animSprite = new AnimatedSprite(animationSheet, 1, 2,0.2);
             _DebugTexture = debug_Texture;
         }
