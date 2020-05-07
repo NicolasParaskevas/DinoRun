@@ -39,7 +39,8 @@ namespace DinoRun.Objects
         public void Draw(SpriteBatch spriteBatch) 
         {
             spriteBatch.Draw(Sprite, Position, Color.White);
-            spriteBatch.Draw(_DebugTexture, new Rectangle((int)Body.X, (int)Body.Y, (int)Body.Bounds.Width, (int)Body.Bounds.Height), new Color(Color.Blue, 0.5f));
+            if(_DebugTexture != null)
+                spriteBatch.Draw(_DebugTexture, new Rectangle((int)Body.X, (int)Body.Y, (int)Body.Bounds.Width, (int)Body.Bounds.Height), new Color(Color.Blue, 0.5f));
         }
     }
 }
