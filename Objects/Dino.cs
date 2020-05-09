@@ -27,7 +27,7 @@ namespace DinoRun.Objects
             Position.Y = position.Y;
             InitY = position.Y;
             Sprite = sprite;
-            Body = world.Create(Position.X, Position.Y, Sprite.Width-20, Sprite.Height);
+            Body = world.Create(Position.X+20, Position.Y, Sprite.Width-40, Sprite.Height);
             animSprite = new AnimatedSprite(animationSheet, 1, 2,0.2);
             _DebugTexture = debug_Texture;
         }
@@ -59,7 +59,7 @@ namespace DinoRun.Objects
 
         public IMovement CheckCollision()
         {
-            var result = Body.Move(Position.X, Position.Y, (collision) => CollisionResponses.None);
+            var result = Body.Move(Position.X+20, Position.Y, (collision) => CollisionResponses.None);
             
             return result;
         }

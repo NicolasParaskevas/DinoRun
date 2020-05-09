@@ -26,6 +26,7 @@ namespace DinoRun
         double CactusTimer = 2000;
         float WorldSpeed = 2;
         bool SpaceReleased = false;
+        bool Debug = true;
         //Textures
         List<Texture2D> cactiSprites;
         Texture2D cloudTexture;
@@ -50,9 +51,11 @@ namespace DinoRun
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            _DebugTexture = null; //new Texture2D(GraphicsDevice, 1, 1);
-            if(_DebugTexture != null)
+            if (Debug) 
+            {
+                _DebugTexture = new Texture2D(GraphicsDevice, 1, 1);
                 _DebugTexture.SetData(new Color[] { Color.DarkSlateGray });
+            }
             dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"),world, _DebugTexture);
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
