@@ -27,6 +27,7 @@ namespace DinoRun
         float WorldSpeed = 2;
         bool SpaceReleased = false;
         bool Debug = true;
+        bool DebugKeyReleased = false;
         //Textures
         List<Texture2D> cactiSprites;
         Texture2D cloudTexture;
@@ -51,11 +52,10 @@ namespace DinoRun
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            if (Debug) 
-            {
-                _DebugTexture = new Texture2D(GraphicsDevice, 1, 1);
-                _DebugTexture.SetData(new Color[] { Color.DarkSlateGray });
-            }
+
+            _DebugTexture = new Texture2D(GraphicsDevice, 1, 1);
+            _DebugTexture.SetData(new Color[] { Color.DarkSlateGray });
+            
             dino = new Dino(new Vector2(100, 300), Content.Load<Texture2D>("dino"), Content.Load<Texture2D>("dino_run_sheet"),world, _DebugTexture);
             ground = new Ground(new Vector2(0, 360), Content.Load<Texture2D>("ground")); 
             ground2 = new Ground(new Vector2(800, 360), Content.Load<Texture2D>("ground"));
@@ -82,6 +82,12 @@ namespace DinoRun
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            if (Keyboard.GetState().IsKeyUp(Keys.D)) DebugKeyReleased = true;
+            if (Keyboard.GetState().IsKeyDown(Keys.D) && DebugKeyReleased) 
+            {
+                Debug = !Debug;
+                DebugKeyReleased = false;
+            }
             switch (currentState)
             {
                 case State.Menu:
@@ -147,7 +153,7 @@ namespace DinoRun
                 case State.Menu:
                     ground.Draw(spriteBatch);
                     ground2.Draw(spriteBatch);
-                    dino.Draw(spriteBatch, currentState);
+                    dino.Draw(spriteBatch, currentState, Debug);
                     HUD.DrawMenu(spriteBatch, gameTime);
                     break;
                 case State.Game:
@@ -158,9 +164,9 @@ namespace DinoRun
                         cloud.Draw(spriteBatch);
 
                     foreach (var cactus in cacti)
-                        cactus.Draw(spriteBatch);
+                        cactus.Draw(spriteBatch,Debug);
 
-                    dino.Draw(spriteBatch,currentState);
+                    dino.Draw(spriteBatch,currentState, Debug);
                     HUD.DrawGame(spriteBatch, gameTime, Score);
                     break;
                 case State.GameOver:
@@ -170,8 +176,8 @@ namespace DinoRun
                         cloud.Draw(spriteBatch);
 
                     foreach (var cactus in cacti)
-                        cactus.Draw(spriteBatch);
-                    dino.Draw(spriteBatch, currentState);
+                        cactus.Draw(spriteBatch,Debug);
+                    dino.Draw(spriteBatch, currentState,Debug);
                     HUD.DrawGameOVer(spriteBatch,gameTime,Score);
                     break;
             }

@@ -64,13 +64,13 @@ namespace DinoRun.Objects
             return result;
         }
 
-        public void Draw(SpriteBatch spriteBatch, State state) 
+        public void Draw(SpriteBatch spriteBatch, State state, bool debug) 
         {
             if (state == State.Game && OnGround == true)
                 animSprite.Draw(spriteBatch, Position);
             else
                 spriteBatch.Draw(Sprite, Position, Color.White);
-            if (_DebugTexture != null)
+            if (debug)
                 spriteBatch.Draw(_DebugTexture, new Rectangle((int)Body.X,(int)Body.Y,(int)Body.Bounds.Width,(int)Body.Bounds.Height), new Color(Color.Green, 0.5f));
         }
     }
