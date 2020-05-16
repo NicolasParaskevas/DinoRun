@@ -1,5 +1,6 @@
 ﻿using DinoRun.Objects;
 using DinoRun.States;
+using DinoRun.Managers;
 using Humper;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,6 +22,7 @@ namespace DinoRun
         SpriteFont Font;
         State currentState = State.Menu;
         int Score = 0;
+        int HighScore = 0;
         double ScoreTimer = 100;
         double CloudTimer = 1000;
         double CactusTimer = 2000;
@@ -28,6 +30,7 @@ namespace DinoRun
         bool SpaceReleased = false;
         bool Debug = true;
         bool DebugKeyReleased = false;
+        bool SavedHighScore = false;
         //Textures
         List<Texture2D> cactiSprites;
         Texture2D cloudTexture;
@@ -41,6 +44,7 @@ namespace DinoRun
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 400;
             world = new World(800, 400);
+            HighScore = ScoreManager.GetHighScore();
         }
 
         protected override void Initialize()
@@ -136,7 +140,12 @@ namespace DinoRun
                     {
                         ResetGame();
                         SpaceReleased = false;
-                        currentState = State.Game;
+                        break;
+                    }
+                    if (!SavedHighScore) 
+                    {
+                        HighScore = ScoreManager.SetHighScore(Score);
+                        SavedHighScore = true;
                     }
                     break;
             }
@@ -167,7 +176,7 @@ namespace DinoRun
                         cactus.Draw(spriteBatch,Debug);
 
                     dino.Draw(spriteBatch,currentState, Debug);
-                    HUD.DrawGame(spriteBatch, gameTime, Score);
+                    HUD.DrawGame(spriteBatch, gameTime, Score, HighScore);
                     break;
                 case State.GameOver:
                     ground.Draw(spriteBatch);
@@ -178,7 +187,7 @@ namespace DinoRun
                     foreach (var cactus in cacti)
                         cactus.Draw(spriteBatch,Debug);
                     dino.Draw(spriteBatch, currentState,Debug);
-                    HUD.DrawGameOVer(spriteBatch,gameTime,Score);
+                    HUD.DrawGameOVer(spriteBatch,gameTime,Score, HighScore);
                     break;
             }
             spriteBatch.End();
@@ -237,6 +246,8 @@ namespace DinoRun
             cacti.Clear();
             WorldSpeed = 2;
             Score = 0;
+            SavedHighScore = false;
+            currentState = State.Game;
         }
     }
 }

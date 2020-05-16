@@ -36,9 +36,9 @@ namespace DinoRun.Objects
         }
 
         //Drawing score & highscore
-        public static void DrawGame(SpriteBatch spriteBatch, GameTime gameTime, int score)
+        public static void DrawGame(SpriteBatch spriteBatch, GameTime gameTime, int score, int highscore)
         {
-            DrawScore(spriteBatch, score);
+            DrawScore(spriteBatch, score, highscore);
             if (titlePosition.Y + titleSize.Y > 0) 
             {
                 spriteBatch.DrawString(Font, Title, titlePosition, new Color(83, 83, 83));
@@ -48,15 +48,16 @@ namespace DinoRun.Objects
         }
 
         //Drawing game over screen
-        public static void DrawGameOVer(SpriteBatch spriteBatch, GameTime gameTime, int score)
+        public static void DrawGameOVer(SpriteBatch spriteBatch, GameTime gameTime, int score, int highscore)
         {
-            DrawScore(spriteBatch, score);
+            DrawScore(spriteBatch, score, highscore);
             spriteBatch.DrawString(Font, GameOverTitle, gameOverPosition, new Color(83, 83, 83));
         }
 
-        private static void DrawScore(SpriteBatch spriteBatch,int score) 
+        private static void DrawScore(SpriteBatch spriteBatch,int score, int highscore) 
         {
-            spriteBatch.DrawString(Font, "Score: " + score.ToString(), new Vector2(0, 0), new Color(83, 83, 83));
+            spriteBatch.DrawString(Font,score.ToString(), new Vector2(0, 0), new Color(83, 83, 83));
+            spriteBatch.DrawString(Font, "BEST: " + highscore.ToString(), new Vector2(0, 30), new Color(83, 83, 83));
         }
     }
 }
