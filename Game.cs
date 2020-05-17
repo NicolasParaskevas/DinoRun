@@ -21,9 +21,6 @@ namespace DinoRun
         List<Cactus> cacti;
         SpriteFont Font;
         State currentState = State.Menu;
-        int Score = 0;
-        int HighScore = 0;
-        double ScoreTimer = 100;
         double CloudTimer = 1000;
         double CactusTimer = 2000;
         float WorldSpeed = 2;
@@ -44,7 +41,7 @@ namespace DinoRun
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 400;
             world = new World(800, 400);
-            HighScore = ScoreManager.GetHighScore();
+            ScoreManager.InitializeHighScore();
         }
 
         protected override void Initialize()
@@ -132,7 +129,7 @@ namespace DinoRun
                         currentState = State.GameOver;
                         Console.WriteLine("Body collided!" + gameTime.TotalGameTime.TotalSeconds.ToString());
                     }
-                    UpdateScore(gameTime);
+                    WorldSpeed = ScoreManager.UpdateScore(gameTime, WorldSpeed);
                     break;
                 case State.GameOver:
                     if (Keyboard.GetState().IsKeyUp(Keys.Space)) SpaceReleased = true; 
@@ -144,7 +141,7 @@ namespace DinoRun
                     }
                     if (!SavedHighScore) 
                     {
-                        HighScore = ScoreManager.SetHighScore(Score);
+                        ScoreManager.SetHighScore();
                         SavedHighScore = true;
                     }
                     break;
@@ -176,7 +173,7 @@ namespace DinoRun
                         cactus.Draw(spriteBatch,Debug);
 
                     dino.Draw(spriteBatch,currentState, Debug);
-                    HUD.DrawGame(spriteBatch, gameTime, Score, HighScore);
+                    HUD.DrawGame(spriteBatch, gameTime, ScoreManager.Score, ScoreManager.HighScore);
                     break;
                 case State.GameOver:
                     ground.Draw(spriteBatch);
@@ -187,7 +184,7 @@ namespace DinoRun
                     foreach (var cactus in cacti)
                         cactus.Draw(spriteBatch,Debug);
                     dino.Draw(spriteBatch, currentState,Debug);
-                    HUD.DrawGameOVer(spriteBatch,gameTime,Score, HighScore);
+                    HUD.DrawGameOVer(spriteBatch,gameTime, ScoreManager.Score, ScoreManager.HighScore);
                     break;
             }
             spriteBatch.End();
@@ -211,20 +208,6 @@ namespace DinoRun
             }
         }
 
-        //Score Logic
-        private void UpdateScore(GameTime gameTime) 
-        {
-            ScoreTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (ScoreTimer <= 0) 
-            {
-                Score++;
-                if (Score % 100 == 0 && WorldSpeed < 10)
-                    WorldSpeed+=0.5f;
-
-                ScoreTimer = 100;
-            }
-        }
-
         //Cloud Logic
         private void AddCloud(GameTime gameTime) 
         {
@@ -245,7 +228,7 @@ namespace DinoRun
                 world.Remove(cactus.Body);
             cacti.Clear();
             WorldSpeed = 2;
-            Score = 0;
+            ScoreManager.Score = 0;
             SavedHighScore = false;
             currentState = State.Game;
         }

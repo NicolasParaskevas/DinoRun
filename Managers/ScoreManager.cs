@@ -10,13 +10,14 @@ namespace DinoRun.Managers
 {
     public static class ScoreManager
     {
-        private static int HighScore { get; set; }
-        private static int Score { get; set; }
+        public static int HighScore { get; set; }
+        public static int Score { get; set; }
+        private static double ScoreTimer = 100;
 
         private static string path = Path
                 .Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DinoRunGame");
 
-        public static int GetHighScore()
+        public static void InitializeHighScore()
         {
             Directory.CreateDirectory(path);
             if (File.Exists(path + @"\score.txt"))
@@ -36,20 +37,28 @@ namespace DinoRun.Managers
                 file.Close();
                 HighScore = 0;
             }
-            return HighScore;
         }
 
-        public static void UpdateScore(GameTime gameTime)
+        public static float UpdateScore(GameTime gameTime, float worldSpeed)
         {
-            // will be implemented
-        }
-
-        public static int SetHighScore(int score) 
-        {
-            if (score > HighScore) 
+            ScoreTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (ScoreTimer <= 0)
             {
-                File.WriteAllText(path + @"\score.txt", score.ToString());
-                HighScore = score;
+                Score++;
+                if (Score % 100 == 0 && worldSpeed < 10)
+                    worldSpeed += 0.5f;
+
+                ScoreTimer = 100;
+            }
+            return worldSpeed;
+        }
+
+        public static int SetHighScore() 
+        {
+            if (Score > HighScore) 
+            {
+                File.WriteAllText(path + @"\score.txt", Score.ToString());
+                HighScore = Score;
             }
             return HighScore;
         }
