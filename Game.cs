@@ -213,7 +213,7 @@ namespace DinoRun
         {
             var rand = new Random(gameTime.TotalGameTime.Seconds);
             CloudTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
-            if(CloudTimer <= 0)
+            if(CloudTimer <= 0 && clouds.Count < 3) //Limiting the number of clouds at the same time to 3
             {
                 clouds.Add(new Cloud(cloudTexture, gameTime));
                 CloudTimer = 10000 + rand.NextDouble()*20000; //Spawining time is inbetween 10 to 30 seconds
