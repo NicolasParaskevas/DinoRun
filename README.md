@@ -1,6 +1,8 @@
 # DinoRun
 A clone of the T-Rex endless runner game of Google Chrome written in C# and MonoGame
 
+![](game.gif)
+
 About
 ------
 I created this project to teach myself MonoGame, This isn't a carbon copy of the original Chrome T-Rex game. Feel free to fork it
