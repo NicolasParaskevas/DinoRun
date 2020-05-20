@@ -25,7 +25,7 @@ namespace DinoRun
         double CactusTimer = 2000;
         float WorldSpeed = 2;
         bool SpaceReleased = false;
-        bool Debug = true;
+        bool Debug = false;
         bool DebugKeyReleased = false;
         bool SavedHighScore = false;
         //Textures
